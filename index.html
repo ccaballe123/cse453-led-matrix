@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
+	<title>Farbtastic v2</title>
+	<script type="text/javascript" charset="utf-8" src="src/farbtastic.js"></script>
+	<script type="text/javascript" charset="utf-8">
+	 $(function () {
+	   $('#colorpicker1').farbtastic('#color1');
+	   $('#colorpicker2').farbtastic({ callback: '#color2', width: 150 });
+	 });
+	</script>
+	<style type="text/css" media="screen">
+	 .colorpicker {
+	   float: left;
+	   margin: 1em;
+	 }
+	 form {
+	   margin: 2em 1em 0 1;
+	   text-align: center;
+	 }
+	 body {
+	   font-family: "Lucida Grande", "Lucida Unicode", "Lucida Sans", sans-serif;
+	 }
+	 p {
+	   clear: both;
+	 }
+	</style>
+</head>
+
+<body>
+  
+
+<div class="colorpicker">
+  <div id="colorpicker1"></div>
+  <form><input type="text" id="color1" /></form>
+</div>
+
+
+
+</body>
+</html>
+
