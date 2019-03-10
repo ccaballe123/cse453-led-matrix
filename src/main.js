@@ -4,11 +4,11 @@ var ctx;
 var WIDTH = 1200;
 var HEIGHT = 800;
 
-tileW = 16;
-tileH = 16;
+tileW = 40;
+tileH = 40;
 
-tileRowCount = 25;
-tileColumnCount = 40;
+tileRowCount = 16;
+tileColumnCount = 16;
 
 
 boundX = 0;
@@ -39,11 +39,34 @@ function clear(){
 	ctx.clearRect(0,0,WIDTH,HEIGHT);
 }
 
+function clearAllTiles(){
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			tiles[c][r].state = 'e';
+		}
+	}	
+}
+
+function sendData(){
+//TO DO
+/*
+color data for the matrix could go like this:
+if state of tile = 'e' then LED at that position should be off
+else it should be close to the state value which is really just the 
+color in hex representation
+
+Maybe just send a 16*16 matrix of the state of each tile, which can
+then somehow be processed by the arduino
+*/	
+}
+
+
+
 function draw(){
 	clear();
 	
-	for(c = 0; c < 16; c++){
-		for(r = 0; r < 16; r++){
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
 			rect(tiles[c][r].x, tiles[c][r].y, tileW, tileH, tiles[c][r].state);
 		}
 	}

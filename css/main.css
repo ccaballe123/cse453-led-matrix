@@ -1,0 +1,14 @@
+#myCanvas {
+	border: 1px solid black;
+	border-style: solid;
+	background-color: gray;
+	position: relative;
+	left: 50px;
+}
+
+#controlButtons {
+	position: relative;
+	left: 55px;
+	top: 2px;
+}
+

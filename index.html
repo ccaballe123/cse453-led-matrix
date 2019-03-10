@@ -6,6 +6,7 @@
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 	<title>453 LED Paintrix</title>
 	<script type="text/javascript" charset="utf-8" src="src/farbtastic.js"></script>
+	
 	<!--Interactivity Scripts-->
 	<script type="text/javascript" charset="utf-8">
 	 $(function () {
@@ -35,13 +36,17 @@
   
 
 <div class="colorpicker">
-  <div id="colorpicker1"></div>
-  <form><input type="text" id="color1" /></form>
+	<div id="colorpicker1"></div>
+	<form><input type="text" id="color1" /></form>
+	<div id = "controlButtons">
+		<button onclick="clearAllTiles()">Clear All Tiles</button>
+		<button onclick="sendData()">Color Matrix</button>
+	</div>
 </div>
 
-	<canvas id='myCanvas' width='1200' height='800'></canvas>
+	<canvas id='myCanvas' width='686' height='686'></canvas>
 	<script type="text/javascript" src="src/main.js"></script>
-
+	<link rel="stylesheet" type="text/css" href="css/main.css">
 
 </body>
 </html>
