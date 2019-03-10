@@ -1,11 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
-	<title>Farbtastic v2</title>
+	<title>453 LED Paintrix</title>
 	<script type="text/javascript" charset="utf-8" src="src/farbtastic.js"></script>
+	<!--Interactivity Scripts-->
 	<script type="text/javascript" charset="utf-8">
 	 $(function () {
 	   $('#colorpicker1').farbtastic('#color1');
@@ -38,8 +39,14 @@
   <form><input type="text" id="color1" /></form>
 </div>
 
+	<canvas id='myCanvas' width='1200' height='800'></canvas>
+	<script type="text/javascript" src="src/main.js"></script>
 
 
 </body>
 </html>
+
+
+
+
 
