@@ -55,9 +55,30 @@ if state of tile = 'e' then LED at that position should be off
 else it should be close to the state value which is really just the 
 color in hex representation
 
-Maybe just send a 16*16 matrix of the state of each tile, which can
-then somehow be processed by the arduino
-*/	
+Idea is to send each color one at a time, while the arduino is receving them
+and coloring in the matrix one at a time. In theory this should happen fast enough
+that its not too noticeable to be happening one by one
+*/		
+for(r = 0; r < tileRowCount; r++){
+	var rev = 0;
+		for(c = 0; c < tileColumnCount; c++){
+			//This line is to make sure data gets sent in the order
+			//of how the matrix lights are wired
+			if(r%2 != 0)c = tileColumnCount - 1 - rev;
+			
+			//Turn RGB to GRB(since the matrix uses GRB)
+			var x = tiles[c][r].state;
+			x = x.slice(1,7);
+			x = parseInt(x, 16);
+			x = (x & 0x0000FF) | ((x & 0xFF0000) >>> 8) | ((x & 0x00FF00) << 8);	
+			
+			//Instead of printing this number x to the console,
+			//this is where it should be sent to the arduino 
+			console.log(x.toString(16));
+			
+			c = rev++;
+		}
+	}	
 }
 
 
