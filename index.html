@@ -5,54 +5,89 @@
   <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
 	<title>LED Matrix</title>
-	<script type="text/javascript" charset="utf-8" src="src/farbtastic.js"></script>
 	
-	<!--Interactivity Scripts-->
-	<script type="text/javascript" charset="utf-8">
-	 $(function () {
-	   $('#colorpicker1').farbtastic('#color1');
-	
-	 });
-	</script>
-	<style type="text/css" media="screen">
-	 .colorpicker {
-	   float: left;
-	   margin: 1em;
-	 }
-	 form {
-	   margin: 2em 1em 0 1;
-	   text-align: center;
-	 }
-	 body {
-	   font-family: "Lucida Grande", "Lucida Unicode", "Lucida Sans", sans-serif;
-	 }
-	 p {
-	   clear: both;
-	 }
-	</style>
 
 
 </head>
 
+
 <body>
 
+<<!--script type="text/javascript" charset="utf-8">
+	 $(function () {
+	   document.getElementById('register-box').style.display='none';
+	
+	 });
+	</script>
 
-  
+<button onclick="document.getElementById('loginbox').style.display='block'" style="width:auto;">Login</button>
+<button onclick="document.getElementById('register-modal').style.display='block'" style="width:auto;">Register</button>-->
 
-<div class="colorpicker">
-	<div id="colorpicker1"></div>
-	<form><input type="text" id="color1" /></form>
-	<div id = "controlButtons">
-		<button onclick="clearAllTiles()">Clear All Tiles</button>
-		<button onclick="sendData()">Color Matrix</button>
-	</div>
+<div class="login-box">
+    <img src="images/avatar3.png" class="avatar">
+        <h1> Welcome to Makerspace</h1>
+        <h2>Login Here</h2>
+        <form class="login-form" action"/cgi-bin/login.py" method="get">
+			
+            <p>Student's Username</p>
+            <input type="text" name="user-name" placeholder="Enter Username" required>
+            
+            <p>Password</p>
+            <input type="password" name="password" placeholder="Enter Password">
+            
+            <input type="hidden" name="form-type" value="login">
+            <button type="submit" name="submit" value="Login">Login!</button>
+            <a href="#">Forgot your password?</a><br>
+            <a href="#">Don't have an account? Register here</a>
+            
+        </form>
 </div>
 
+<!--<div class="register-box">
+    <img src="images/avatar3.png" class="avatar">
+        <h1> Welcome to Makerspace</h1>
+        <h2>Register Here</h2>
+        <form>
+            <p>Student's Username</p>
+            <input type="text" name="user-name" placeholder="Enter Username">
+            <p>Password</p>
+            <input type="password1" name="pswd" placeholder="Enter Password">
+            <input type="submit"  name="submit" value="Login">
+            <a href="#">Lost your password?</a><br>
+            <a href="#">Don't have an account?</a>
+        </form>
+</div>-->
+
+<!--<div id="register-modal" class="modal">
+  
+  <form class="modal-content animate" action="/cgi-bin/login.py">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('register-modal').style.display='none'" class="close" title="Close Modal">&times;</span>
+    </div>
+
+    <div class="container">
+      <label for="uname"><b>Enter new username</b></label>
+      <input type="text" placeholder="Enter Username" name="user-name" required>
+      <input type="hidden" name="form-type" value="login">
+
+      <!--<label for="psw"><b>Password</b></label>
+      <input type="password" placeholder="Enter Password" name="psw" required>-->
+        
+      <!--<button onclick="addUser()" type="submit">Create account</button>
+    </div>
+
+    <div class="container" style="background-color:#f1f1f1">
+      <button type="button" onclick="document.getElementById('register-modal').style.display='none';document.getElementById('login-modal').style.display='block'" class="cancelbtn">Cancel</button>
+      <!--<span class="psw">Forgot <a href="#">password?</a></span>-->
+    <!--</div>
+  </form>
+</div>-->
 
 
-	<canvas id='myCanvas' width='686' height='686'></canvas>
-	<script type="text/javascript" src="src/main.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+
+	<script type="text/javascript" src="src/login.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/login.css">
 
 
 

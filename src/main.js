@@ -13,6 +13,7 @@ tileColumnCount = 16;
 
 boundX = 0;
 boundY = 0;
+var dataString = "";
 
 var tiles = [];
 for(c = 0; c < tileColumnCount; c++){
@@ -59,14 +60,13 @@ function sleep(milliseconds) {
 }
 
 
-function sendData(){
-var dataString = "";		
-for(r = (tileRowCount-1); r >= 0; r--){
-	var rev = 0;
+function sendData(){		
+	for(r = (tileRowCount-1); r >= 0; r--){
+		var rev = 0;
 		for(c = 0; c < tileColumnCount; c++){
 			//This line is to make sure data gets sent in the order
 			//of how the matrix lights are wired
-			if(r%2 == 0)c = tileColumnCount - 1 - rev;
+			if( r % 2 == 0) c = tileColumnCount - 1 - rev;
 			
 			//Turn RGB to GRB(since the matrix uses GRB)
 			var x = tiles[c][r].state;
@@ -75,7 +75,7 @@ for(r = (tileRowCount-1); r >= 0; r--){
 			x = (x & 0x0000FF) | ((x & 0xFF0000) >>> 8) | ((x & 0x00FF00) << 8);	
 
 			var ledString = x.toString(16);
-while(ledString.length < 6) ledString = '0' + ledString;
+			while(ledString.length < 6) ledString = '0' + ledString;
 			dataString = dataString + ledString;
 			c = rev++;
 		}
@@ -85,9 +85,8 @@ while(ledString.length < 6) ledString = '0' + ledString;
 			      	url: "/cgi-bin/pytest.py",
 				data: {param: dataString},
 			     context: document.body
-			    });	
+			});	
 }
-
 
 
 function draw(){

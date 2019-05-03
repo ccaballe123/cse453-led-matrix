@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	
+	<script type="text/javascript" src="src/main.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" ></script>
+	<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+	<script type="text/javascript" charset="utf-8" src="src/farbtastic.js"></script>
+	
+	<!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
+	<title>LED Matrix</title>
+	
+	
+	<!--Interactivity Scripts-->
+	<script type="text/javascript" charset="utf-8">
+	 $(function () {
+	   $('#colorpicker1').farbtastic('#color1');
+	
+	 });
+	</script>
+	
+	<!--<style type="text/css" media="screen">
+		.colorpicker {
+			float: left;
+			margin: 1em;
+		}
+		form {
+			margin: 2em 1em 0 1;
+			text-align: center;
+		}
+		body {
+			font-family: "Lucida Grande", "Lucida Unicode", "Lucida Sans", sans-serif;
+		}
+		p {
+			clear: both;
+		}
+	</style>-->
+
+
+</head>
+
+<body>
+
+<body>
+
+
+
+ <div id="main-container"> 
+
+
+	<header class="row" id="top-container">
+		<div class="row">
+			<div class="column top-left">
+				<button id="logoutbtn" onclick="" >Logout</button>
+			</div>
+		</div>
+	</header>
+	
+	
+	<div class="row">
+		<div class="column left" >
+			<div id="colorpicker1"></div>
+			<form ><input type="text" id="color1" /></form>
+			
+			<div class="row" id = "controlButtons">
+				<button onclick="clearAllTiles()">Clear All Tiles</button>
+				<button onclick="sendData()">Color Matrix</button>
+			</div>
+			<button onclick="sendData()" >Save Sketch</button>
+		</div>
+	
+		<div class="column middle" >
+			<canvas id='myCanvas' width='686' height='686'></canvas>
+			
+		</div>
+	
+	
+		<div class="column right" >
+			<table style="height: 100px; overflow: auto"></table>
+		</div>
+	</div>
+	
+	
+	<footer id="bottom-container">
+		<div class="row">
+			<div class="column top-left">
+			</div>
+		</div>
+	</footer>
+
+	
+
+</div>
+	
+	
+	<script type="text/javascript" src="src/main.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" ></script>
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+
+
+
+</body>
+
+</html>

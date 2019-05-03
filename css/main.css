@@ -7,8 +7,70 @@
 }
 
 #controlButtons {
-	position: relative;
-	left: 55px;
-	top: 2px;
+	margin: 0 auto;
+	position: center;
 }
+
+#colorpicker1{
+	float: center;
+    margin: 0 auto;
+}
+form {
+	margin: 0 auto;
+	text-align: left;
+	width: 250px;
+}
+#color1{
+	text-align: left;
+	width: 250px;
+
+}
+body {
+	font-family: "Lucida Grande", "Lucida Unicode", "Lucida Sans", sans-serif;
+}
+p {
+	clear: both;
+}
+table{
+	overflow-y: scroll;
+	height: 100px
+	display: block;
+}
+
+* {
+  box-sizing: border-box;
+}
+.top-left{
+margin: 0 auto;
+	text-align: right;
+}
+
+/* Create three unequal columns that floats next to each other */
+.column {
+  float: left;
+  padding: 10px;
+}
+
+.left, .right {
+  width: 25%;
+  
+}
+
+.middle {
+  width: 50%;
+	text-align: center;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+  }
 
