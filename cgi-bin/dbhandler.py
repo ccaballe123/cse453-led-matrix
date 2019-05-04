@@ -1,8 +1,9 @@
 import os
 import sqlite3
+import shutil
 
 def getLastRecordId():
-	db = sqlite3.connect("test.db") 
+	db = sqlite3.connect("database.db") 
 	cursor = db.cursor();
 	cursor.execute(''' SELECT * FROM students ORDER BY ID DESC LIMIT 1''')
 	studentRecord = cursor.fetchone()
@@ -14,7 +15,8 @@ def getLastRecordId():
 		return studentRecord[0]
 	
 def getUserNameCount(userName):
-	db = sqlite3.connect("test.db") 
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
 	cursor = db.cursor();
 	cursor.execute(''' SELECT COUNT(*) FROM students where userName = ?''', (userName,))
 	count = cursor.fetchone()
@@ -22,23 +24,146 @@ def getUserNameCount(userName):
 	return count[0]
 	
 def userExists(userName):
-	db = sqlite3.connect("test.db") 
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
 	cursor = db.cursor();
 	cursor.execute(''' SELECT id FROM students where userName = ?''', (userName,))
 	exists = cursor.fetchall()
 	db.close()
-	if len(exists) ==0:
+	if exists is None:
 		return 0
 	return 1
 	
 def getSketchCount(userName):
-	db = sqlite3.connect("test.db") 
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
 	cursor = db.cursor();
 	cursor.execute(''' SELECT sketchCount FROM students where userName = ?''', (userName,))
-	sketchCount = cursor.fetchone()
+	sketchCount = cursor.fetchall()
 	db.close()
-	return sketchCount[0]
+	if sketchCount is None:
+		return 0
+	return sketchCount[0][0] 
+	
+def getUserPass(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT password FROM students where userName = ?''', (userName,))
+	sketchCount = cursor.fetchall()
+	db.close()
+	if sketchCount is None:
+		return 0
+	return sketchCount[0][0] 
 
+def getSavedSketchNames(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT sketchName FROM student_sketches where userName = ?''', (userName,))
+	sketchNames = cursor.fetchall()
+	db.close()
+	arr = [None] * len(sketchNames)
+	if sketchNames is None:
+		return ''
+	else:
+		for i in range(0, len(sketchNames)):
+			tupl = sketchNames[i]
+			arr[i] = tupl[0]
+	return arr
+	
+def sketchExist(userName,sketchName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT sketchName FROM student_sketches where userName = ?''', (userName,))
+	sketchNames = cursor.fetchall()
+	db.close()
+	if sketchNames is None:
+		return False
+	else:
+		for i in range(0,len(sketchNames)):
+			tupl = sketchNames[i]
+			if tupl[0] == sketchName:
+				return True
+	return False
+	
+def isUserLoggedin(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT loggedin FROM students where userName = ?''', (userName,))
+	sketchCount = cursor.fetchall()
+	db.close()
+	if sketchCount is None:
+		return 0
+	return sketchCount[0][0]
+
+def getAllLoggedinUsers():
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT userName FROM students where loggedin = 1''')
+	studentRecord = cursor.fetchall()
+	db.close()
+	arr = [None] * len(studentRecord)
+	if studentRecord is None:
+		return False
+	else:
+		for i in range(0,len(studentRecord)):
+			tupl = studentRecord[i]
+			arr[i] = tupl[0]
+			
+	return arr
+	
+def getAllLoggedoutUsers():
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT userName FROM students where loggedin = 0''')
+	studentRecord = cursor.fetchall()
+	db.close()
+	arr = [None] * len(studentRecord)
+	if studentRecord is None:
+		return False
+	else:
+		for i in range(0,len(studentRecord)):
+			tupl = studentRecord[i]
+			arr[i] = tupl[0]
+			
+	return arr
+
+def getAllUsersNames():
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT userName FROM students''')
+	studentRecord = cursor.fetchall()
+	db.close()
+	arr = [None] * len(studentRecord)
+	if studentRecord is None:
+		return False
+	else:
+		for i in range(0,len(studentRecord)):
+			tupl = studentRecord[i]
+			arr[i] = tupl[0]
+			
+	return arr
+	
+def getAllSavedSketches():
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT sketchName FROM student_sketches''')
+	studentRecord = cursor.fetchall()
+	db.close()
+	arr = [None] * len(studentRecord)
+	if studentRecord is None:
+		return False
+	else:
+		for i in range(0,len(studentRecord)):
+			tupl = studentRecord[i]
+			arr[i] = tupl[0]
+			
+	return arr
+
+	
 
 def saveSketch(userName, data, fileName):
 	userName = userName.lower();
@@ -48,28 +173,22 @@ def saveSketch(userName, data, fileName):
 	
 	#sketchPath = "/home/elwin/sketches/"+userName+"/"
 	sketchPath = userName+"/"
+	sketchCount =0;
 	
-	
-		
-	
-	db = sqlite3.connect("test.db")
+	db = sqlite3.connect("database.db")
 	cursor = db.cursor() 
 	
-	if userExists(userName) == 1 and getUserNameCount(userName) == 1:
-		cursor.execute(''' INSERT INTO students-sketches(userName, sketchName)
+	if userExists(userName) == 1 and getUserNameCount(userName) == 1 and not sketchExist(userName,sketchName):
+		sketchCount = getSketchCount(userName) +1
+		cursor.execute(''' INSERT INTO student_sketches(username, sketchName)
 						VALUES (?,?)
 						''', (userName,sketchName))
+		cursor.execute(''' UPDATE students SET sketchCount = ? WHERE userName = ? ''', (sketchCount, userName))
 
 	if not os.path.exists(sketchPath):
+		print "user does not exists"
 		os.makedirs(sketchPath)
-		cursor.execute(''' INSERT INTO students(id,userName,sketchName,sketchCount)
-						VALUES (?,?,?,0)
-						''', (stuId,userName,sketchName))
-	else:
-		sketchCount = getSketchCount(userName) +1
-	
-		cursor.execute(''' UPDATE students SET sketchCount = ? WHERE userName = ? ''', (userName,sketchCount))
-						
+	else:				
 		f = open(sketchPath+sketchName, "w")
 		f.write(data)
 		f.close()
@@ -89,27 +208,91 @@ def addUser(userName, password):
 	thisUserNameCount = getUserNameCount(userName)
 	success = -1
 	
-	db = sqlite3.connect("test.db")
+	db = sqlite3.connect("database.db")
 	cursor = db.cursor() 
 	try:
-		cursor.execute(''' INSERT INTO students(id,userName,sketchName,sketchCount)
-						VALUES (?,?,NULL,0)
-						''', (stuId,userName))
+		cursor.execute(''' INSERT INTO students(id,username,password,sketchCount,loggedin)
+						VALUES (?,?,?,0,0)
+						''', (stuId,userName,password))
 		db.commit()
 		if not os.path.exists(sketchPath):
 			os.makedirs(sketchPath)
 		
 		success = 0
-	except MySQLdb.IntegrityError:
+	except db.IntegrityError:
 		success = -1
 	finally:
-		cursor.close()
-		db.close()
+		print
+		#cursor.close()
+		#db.close()
+	
+	cursor.close()
+	db.close()
 		
 	return success
 	
+def deleteSketch(userName, sketchName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor()
 	
+	#sketchPath = "/home/elwin/sketches/"+userName+"/"
+	sketchPath = userName+"/"+sketchName
+	
+	if userExists(userName) == 1 and getUserNameCount(userName) == 1 and sketchExist(userName,sketchName):
+		sketchCount = getSketchCount(userName) - 1
+		cursor.execute(''' DELETE FROM student_sketches WHERE sketchName = ?''', (sketchName,))
+		cursor.execute(''' UPDATE students SET sketchCount = ? WHERE userName = ? ''', (sketchCount, userName))
+		db.commit()
+		db.close()
+	
+	try:
+		os.remove(sketchPath)
+	except OSError as e:  ## if failed, report it back  ##
+		print ("Error: %s - %s." % (e.filename, e.strerror))
+		
 
+def deleteUser(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor()
+	
+	#sketchPath = "/home/elwin/sketches/"+userName+"/"
+	sketchPath = userName+"/"
+	
+	if userExists(userName) == 1 and getUserNameCount(userName) == 1:
+		cursor.execute(''' DELETE FROM student_sketches WHERE userName = ?''', (userName,))
+		cursor.execute(''' DELETE FROM students WHERE userName = ? ''', (userName,))
+		db.commit()
+		db.close()
+	
+	try:
+		shutil.rmtree(sketchPath)
+	except OSError as e:  ## if failed, report it back  ##
+		print ("Error: %s - %s." % (e.filename, e.strerror))
+		
+
+def logUserIn(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor()
+	
+	if userExists(userName) == 1 and getUserNameCount(userName) == 1 :
+		cursor.execute(''' UPDATE students SET loggedin = 1 WHERE userName = ? ''', (userName,))
+		db.commit()
+		db.close()
+		
+def logUserOut(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor()
+	
+	
+	if userExists(userName) == 1 and getUserNameCount(userName) == 1 :
+		cursor.execute(''' UPDATE students SET loggedin = 0 WHERE userName = ? ''', (userName,))
+		db.commit()
+		db.close()
+	
 	
 
 

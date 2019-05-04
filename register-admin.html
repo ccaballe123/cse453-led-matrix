@@ -3,9 +3,8 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-  <script type="text/javascript" src="src/main.js"></script>
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
-	<title>LED Matrix</title>
+	<title>LED Matrix Register</title>
 	
 
 
@@ -24,31 +23,28 @@
 <button onclick="document.getElementById('loginbox').style.display='block'" style="width:auto;">Login</button>
 <button onclick="document.getElementById('register-modal').style.display='block'" style="width:auto;">Register</button>-->
 
-<div class="login-box">
+<div class="register-admin-box">
     <img src="images/avatar3.png" class="avatar" />
         <h1> Welcome to Makerspace</h1>
         <h2>Login Here</h2>
         <form class="login-form" action="/cgi-bin/login.py" method="get">
-			<p style="color: red; font-weight: normal" id="bad-credentials">Incorrect Username or Password, please try again</p>
-			<p style="font-weight: normal; font-size: 12px">If you dont wish to save your work you can login with username 'tmp' and no password</p>
-			<br/>
 			
-            <p>Student's Username</p>
-            <input id="currentUserName" type="text" name="user-name" placeholder="Enter Username" required>
+            <p>Enter New Admin Username</p>
+            <input type="text" name="user-name" placeholder="Enter Username" required>
             
             <p>Password</p>
-            <input type="password" name="password" placeholder="Enter Password"/>
+            <input type="password" name="password" placeholder="Enter Password">
             
-            <input type="hidden" name="form-type" value="login"/>
-            <input type="submit" onclick="getCurrentUser()" value="Login"/>
-            <a href="forgot-pass.html">Forgot your password?</a><br>
-            <a href="register.html">Don't have an account? Register here</a>
+            <p>Re-enter Password</p>
+            <input type="password" name="password" placeholder="Enter Password">
             
+            <input type="hidden" name="form-type" value="register-admin">
+            <input type="submit" onclick="">Register!</button>
+            <a href="#">Login</a><br>
         </form>
 </div>
 
 	<script type="text/javascript" src="src/login.js"></script>
-	<script type="text/javascript" src="src/main.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 
 

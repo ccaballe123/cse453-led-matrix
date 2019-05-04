@@ -14,6 +14,54 @@ tileColumnCount = 16;
 boundX = 0;
 boundY = 0;
 var dataString = "";
+var currentUserName = "";
+
+function getCurrentUser(){
+	let sessionType = sessionStorage.getItem("session0");
+	let sessionSuccess = sessionStorage.getItem("session1");
+	console.log("session-type " + sessionType);
+	console.log("session-success " + sessionSuccess);
+	
+	if(sessionType  == "login" &&  sessionSuccess == "true"){
+		currentUserName = sessionStorage.getItem("session2");
+		document.getElementById("username").innerHTML = "Hello, "+sessionStorage.getItem("session2");
+	}
+	
+}
+
+function addRows() {
+	var sessionType = sessionStorage.getItem("session0");
+	var sessionSuccess = sessionStorage.getItem("session1");
+	let count = 0
+	
+	if(sessionType  == "login" &&  sessionSuccess == "true"){
+		count = Number(sessionStorage.getItem("session3"));
+		sessionCnt = 4;
+		for(i=0; i<count; i++){
+			var sketchName = sessionStorage.getItem("session"+String(sessionCnt));
+			
+			var table = document.getElementById("tableData");
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+ 
+    
+			row.insertCell(0).innerHTML= sketchName;
+			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="Javacsript:deletsRow(this)">';
+			row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this)">';
+			sessionCnt++;
+		}
+	}
+ 
+}
+ 
+function deleteRow(obj) {
+      
+    var index = obj.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("myTableData");
+    table.deleteRow(index);
+    
+}
+
 
 var tiles = [];
 for(c = 0; c < tileColumnCount; c++){
@@ -102,6 +150,8 @@ function draw(){
 function init(){
 	canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
+	getCurrentUser();
+	addRows()
 	return setInterval(draw, 10);
 }
 

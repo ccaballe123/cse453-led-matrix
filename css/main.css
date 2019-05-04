@@ -27,6 +27,7 @@ form {
 }
 body {
 	font-family: "Lucida Grande", "Lucida Unicode", "Lucida Sans", sans-serif;
+	background-color: #ebebeb;
 }
 p {
 	clear: both;
@@ -40,10 +41,26 @@ table{
 * {
   box-sizing: border-box;
 }
+
+
+
 .top-left{
-margin: 0 auto;
-	text-align: right;
+	margin: 0 auto;
+  width: 12.5%;
+  text-align: center;
+  
 }
+.top-right {
+  width: 12.5%;
+  text-align: center;
+  
+}
+
+.top-center {
+  width: 75%;
+  text-align: center;
+}
+
 
 /* Create three unequal columns that floats next to each other */
 .column {
@@ -51,9 +68,23 @@ margin: 0 auto;
   padding: 10px;
 }
 
-.left, .right {
+.right {
   width: 25%;
+  text-align: center;
   
+}
+.left {
+	width: 25%
+	
+}
+.left-left{
+	text-align: right;
+	width: 12.5%
+}
+
+.left-rigt{
+	text-align: left;
+	width: 12.5%
 }
 
 .middle {
