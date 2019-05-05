@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
   <script type="text/javascript" src="src/main.js"></script>
   <!--[if IE]><script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/tags/m3/excanvas.compiled.js"></script><![endif]-->
@@ -14,22 +16,14 @@
 
 <body>
 
-<<!--script type="text/javascript" charset="utf-8">
-	 $(function () {
-	   document.getElementById('register-box').style.display='none';
-	
-	 });
-	</script>
 
-<button onclick="document.getElementById('loginbox').style.display='block'" style="width:auto;">Login</button>
-<button onclick="document.getElementById('register-modal').style.display='block'" style="width:auto;">Register</button>-->
 
 <div class="login-box">
     <img src="images/avatar3.png" class="avatar" />
         <h1> Welcome to Makerspace</h1>
         <h2>Login Here</h2>
         <form class="login-form" action="/cgi-bin/login.py" method="get">
-			<p style="color: red; font-weight: normal" id="bad-credentials">Incorrect Username or Password, please try again</p>
+			<p style="color: red; font-weight: normal" id="bad-credentials"></p>
 			<p style="font-weight: normal; font-size: 12px">If you dont wish to save your work you can login with username 'tmp' and no password</p>
 			<br/>
 			

@@ -27,12 +27,30 @@ def userExists(userName):
 	userName = userName.lower();
 	db = sqlite3.connect("database.db") 
 	cursor = db.cursor();
-	cursor.execute(''' SELECT id FROM students where userName = ?''', (userName,))
+	cursor.execute(''' SELECT userName FROM students where userName = ?''', (userName,))
 	exists = cursor.fetchall()
 	db.close()
 	if exists is None:
 		return 0
-	return 1
+	else:
+		for i in range(0, len(exists)):
+			tupl = exists[i]
+			if tupl[0] == userName:
+				return 1
+	return 0
+	
+def getUserType(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor();
+	cursor.execute(''' SELECT userType FROM students where userName = ?''', (userName,))
+	userType = cursor.fetchone()
+	db.close()
+	if userType is None:
+		return ""
+	else:
+		return userType[0]
+	
 	
 def getSketchCount(userName):
 	userName = userName.lower();
@@ -200,7 +218,7 @@ def saveSketch(userName, data, fileName):
 	
 
 
-def addUser(userName, password):
+def addUser(userName, userType, password):
 	userName = userName.lower();
 	stuId = getLastRecordId() +1
 	#sketchPath = "/home/elwin/sketches/"+userName+"/"
@@ -211,9 +229,9 @@ def addUser(userName, password):
 	db = sqlite3.connect("database.db")
 	cursor = db.cursor() 
 	try:
-		cursor.execute(''' INSERT INTO students(id,username,password,sketchCount,loggedin)
-						VALUES (?,?,?,0,0)
-						''', (stuId,userName,password))
+		cursor.execute(''' INSERT INTO students(id,username,userType,password,sketchCount,loggedin)
+						VALUES (?,?,?,?,0,0)
+						''', (stuId,userName,userType,password))
 		db.commit()
 		if not os.path.exists(sketchPath):
 			os.makedirs(sketchPath)
@@ -221,8 +239,7 @@ def addUser(userName, password):
 		success = 0
 	except db.IntegrityError:
 		success = -1
-	finally:
-		print
+	#finally:
 		#cursor.close()
 		#db.close()
 	

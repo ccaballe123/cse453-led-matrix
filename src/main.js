@@ -46,8 +46,8 @@ function addRows() {
  
     
 			row.insertCell(0).innerHTML= sketchName;
-			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="Javacsript:deletsRow(this)">';
-			row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="Javacsript:deleteRow(this)">';
+			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="deletsRow(this)">';
+			row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="deleteRow(this)">';
 			sessionCnt++;
 		}
 	}
@@ -57,11 +57,29 @@ function addRows() {
 function deleteRow(obj) {
       
     var index = obj.parentNode.parentNode.rowIndex;
-    var table = document.getElementById("myTableData");
+    var table = document.getElementById("tableData");
     table.deleteRow(index);
     
 }
 
+function loadMatrix(){
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			tiles[c][r].state = 'e';
+		}
+	}
+	
+}
+
+function saveSketch(){
+	var state = ""
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			state += tiles[c][r].state;
+		}
+	}
+	console.log("Matrix state: "+ state);
+}
 
 var tiles = [];
 for(c = 0; c < tileColumnCount; c++){
@@ -96,6 +114,7 @@ function clearAllTiles(){
 	}
 	
 }
+
 
 
 function sleep(milliseconds) {
