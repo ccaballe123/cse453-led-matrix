@@ -13,6 +13,73 @@ tileColumnCount = 16;
 
 boundX = 0;
 boundY = 0;
+var dataString = "";
+var currentUserName = "";
+
+function getCurrentUser(){
+	let sessionType = sessionStorage.getItem("session0");
+	let sessionSuccess = sessionStorage.getItem("session1");
+	console.log("session-type " + sessionType);
+	console.log("session-success " + sessionSuccess);
+	
+	if(sessionType  == "login" &&  sessionSuccess == "true"){
+		currentUserName = sessionStorage.getItem("session2");
+		document.getElementById("username").innerHTML = "Hello, "+sessionStorage.getItem("session2");
+	}
+	
+}
+
+function addRows() {
+	var sessionType = sessionStorage.getItem("session0");
+	var sessionSuccess = sessionStorage.getItem("session1");
+	let count = 0
+	
+	if(sessionType  == "login" &&  sessionSuccess == "true"){
+		count = Number(sessionStorage.getItem("session3"));
+		sessionCnt = 4;
+		for(i=0; i<count; i++){
+			var sketchName = sessionStorage.getItem("session"+String(sessionCnt));
+			
+			var table = document.getElementById("tableData");
+			var rowCount = table.rows.length;
+			var row = table.insertRow(rowCount);
+ 
+    
+			row.insertCell(0).innerHTML= sketchName;
+			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="deletsRow(this)">';
+			row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="deleteRow(this)">';
+			sessionCnt++;
+		}
+	}
+ 
+}
+ 
+function deleteRow(obj) {
+      
+    var index = obj.parentNode.parentNode.rowIndex;
+    var table = document.getElementById("tableData");
+    table.deleteRow(index);
+    
+}
+
+function loadMatrix(){
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			tiles[c][r].state = 'e';
+		}
+	}
+	
+}
+
+function saveSketch(){
+	var state = ""
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			state += tiles[c][r].state;
+		}
+	}
+	console.log("Matrix state: "+ state);
+}
 
 var tiles = [];
 for(c = 0; c < tileColumnCount; c++){
@@ -49,6 +116,7 @@ function clearAllTiles(){
 }
 
 
+
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -59,14 +127,13 @@ function sleep(milliseconds) {
 }
 
 
-function sendData(){
-var dataString = "";		
-for(r = (tileRowCount-1); r >= 0; r--){
-	var rev = 0;
+function sendData(){		
+	for(r = (tileRowCount-1); r >= 0; r--){
+		var rev = 0;
 		for(c = 0; c < tileColumnCount; c++){
 			//This line is to make sure data gets sent in the order
 			//of how the matrix lights are wired
-			if(r%2 == 0)c = tileColumnCount - 1 - rev;
+			if( r % 2 == 0) c = tileColumnCount - 1 - rev;
 			
 			//Turn RGB to GRB(since the matrix uses GRB)
 			var x = tiles[c][r].state;
@@ -75,7 +142,7 @@ for(r = (tileRowCount-1); r >= 0; r--){
 			x = (x & 0x0000FF) | ((x & 0xFF0000) >>> 8) | ((x & 0x00FF00) << 8);	
 
 			var ledString = x.toString(16);
-while(ledString.length < 6) ledString = '0' + ledString;
+			while(ledString.length < 6) ledString = '0' + ledString;
 			dataString = dataString + ledString;
 			c = rev++;
 		}
@@ -85,9 +152,8 @@ while(ledString.length < 6) ledString = '0' + ledString;
 			      	url: "/cgi-bin/pytest.py",
 				data: {param: dataString},
 			     context: document.body
-			    });	
+			});	
 }
-
 
 
 function draw(){
@@ -103,6 +169,8 @@ function draw(){
 function init(){
 	canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
+	getCurrentUser();
+	addRows()
 	return setInterval(draw, 10);
 }
 

@@ -17,27 +17,21 @@
 <body>
 
 
-
-<div class="login-box">
+<div class="register-box">
     <img src="images/avatar3.png" class="avatar" />
         <h1> Welcome to Makerspace</h1>
-        <h2>Login Here</h2>
-        <form class="login-form" action="/cgi-bin/login.py" method="get">
-			<p style="color: red; font-weight: normal" id="bad-credentials"></p>
-			<p style="font-weight: normal; font-size: 12px">If you dont wish to save your work you can login with username 'tmp' and no password</p>
-			<br/>
-			
-            <p>Student's Username</p>
-            <input id="currentUserName" type="text" name="user-name" placeholder="Enter Username" required>
+        <h2>Register Here</h2>
+        <form class="register-form" action="/cgi-bin/login.py" method="get">
+			<p style="color: red; font-weight: normal" id="bad-username-register"></p>
+			<p style="color: green; font-weight: normal; font-size: 12px" id="register-success"></p>
+			<p style="color: green; font-weight: normal; font-size: 12px" id="new-pass"></p>
+			</br>
+            <p>Enter New Username</p>
+            <input type="text" name="user-name" placeholder="Enter Username" required>
             
-            <p>Password</p>
-            <input type="password" name="password" placeholder="Enter Password"/>
-            
-            <input type="hidden" name="form-type" value="login"/>
-            <input type="submit" onclick="getCurrentUser()" value="Login"/>
-            <a href="forgot-pass.html">Forgot your password?</a><br>
-            <a href="register.html">Don't have an account? Register here</a>
-            
+            <input type="hidden" name="form-type" value="register">
+            <input type="submit" onclick="" value= "Register!">
+            <a href="index.html">Login</a><br>
         </form>
 </div>
 
