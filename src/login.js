@@ -15,6 +15,10 @@ function login(userName){
 			});	*/
 }
 
+function adminLogin(userName){
+	window.location.href = '../led-matrix/admin-matrix.html';
+}
+
 function logout(userName){
 	console.log(userName);
 	//window.location.href = 'index.html';

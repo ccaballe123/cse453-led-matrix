@@ -309,6 +309,16 @@ def logUserOut(userName):
 		cursor.execute(''' UPDATE students SET loggedin = 0 WHERE userName = ? ''', (userName,))
 		db.commit()
 		db.close()
+
+def logAdminIn(userName):
+	userName = userName.lower();
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor()
+	
+	if getUserType(userName) == "admin" and userExists(userName) == 1 and getUserNameCount(userName) == 1 :
+		cursor.execute(''' UPDATE students SET loggedin = 1 WHERE userName = ? ''', (userName,))
+		db.commit()
+		db.close()
 	
 	
 

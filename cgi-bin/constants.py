@@ -6,6 +6,9 @@ import sys
 
 def mainSite(userName):
 	return """<script type="text/javascript">  login('%s'); </script>""" % userName
+
+def adminSite(userName):
+	return """<script type="text/javascript">  adminLogin('%s'); </script>""" % userName
 		 		
 def forgotPass(userName, password):
 	return """	Redirecting...

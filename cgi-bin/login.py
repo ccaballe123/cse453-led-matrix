@@ -33,7 +33,7 @@ def logUserIn():
 		sketches = db.getSavedSketchNames(userName)
 		sessionVar = "login"
 		html +=  consts.addSession("login") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(str(len(sketches)))
-			
+		
 		for i in range(0, len(sketches)):
 			sessionVar = sketches[i]
 			html +=  consts.addSession(sketches[i])
@@ -44,8 +44,27 @@ def logUserIn():
 		html += consts.addSession("login") + consts.addSession("false") + consts.addSession(userName)+ consts.wrongCreds(userName, formType) + consts.endHtml()
 		#print html
 			
+			
 def logAdminIn():
-	print ""
+	global html
+	if db.userExists(userName) == 1 and db.getUserNameCount(userName) == 1 and db.getUserPass(userName) == password:
+
+		db.logAdminIn(userName);
+		sketches = db.getAllSavedSketches();
+		sessionVar = "login"
+		html +=  consts.addSession("login") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(str(len(sketches)))
+			
+		for i in range(0, len(sketches)):
+			sessionVar = sketches[i]
+			html +=  consts.addSession(sketches[i])
+
+		html +=  consts.adminSite(userName) + consts.endHtml()
+		#print html
+			
+	else:	
+		html += consts.addSession("login") + consts.addSession("false") + consts.addSession(userName)+ consts.wrongCreds(userName, formType) + consts.endHtml()
+		#print html
+	
 
  
 def genPassword(numLetters):
@@ -61,7 +80,10 @@ if formType == 'login':
 	if userName == 'tmp':
 		html += consts.addSession("login") + consts.addSession("true") + consts.addSession(userName) + consts.addSession("0")+ consts.mainSite(userName) + consts.endHtml()
 		#print html
-	#elif db.getUserType(userName) == 'admin':  #check if user is administrator  
+
+	elif db.getUserType(userName) == 'admin':  #check if user is administrator  
+		logAdminIn();
+
 	else:
 		logUserIn()
 	
