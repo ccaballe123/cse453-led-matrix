@@ -24,19 +24,19 @@
         <h2>Login Here</h2>
         <form class="login-form" action="/cgi-bin/login.py" method="get">
 			<p style="color: red; font-weight: normal" id="bad-credentials"></p>
-			<p style="font-weight: normal; font-size: 12px">Enter your student ID and press Login</p>
+			<p style="font-weight: normal; font-size: 12px">Enter your username/password and press Login</p>
 			<br/>
 			
-            <p>Your Student ID</p>
-            <input id="currentUserName" type="text" name="user-name" placeholder="Enter Student ID" required>
+            <p>Your Username</p>
+            <input id="currentUserName" type="text" name="user-name" placeholder="Enter admin username" required>
             
             <p>Password</p>
             <input type="password" name="password" placeholder="Enter Password"/>
             
             <input type="hidden" name="form-type" value="login"/>
             <input type="submit" onclick="getCurrentUser()" value="Login"/>
-            <!-- <a href="forgot-pass.html">Forgot your password?</a><br>
-            <a href="register.html">Don't have an account? Register here</a> -->
+            <a href="forgot-pass.html">Forgot your password?</a><br>
+            <a href="register.html">Don't have an account? Register here</a>
             
         </form>
 </div>
