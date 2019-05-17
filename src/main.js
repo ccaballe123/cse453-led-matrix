@@ -16,6 +16,15 @@ boundY = 0;
 var dataString = "";
 var currentUserName = "";
 
+var tiles = [];
+for(c = 0; c < tileColumnCount; c++){
+	tiles[c] = [];
+	for(r = 0; r < tileRowCount; r++){
+		tiles[c][r] = {x: c*(tileW+3), y: r*(tileH+3), state: 'e'};
+	}
+}
+
+
 function getCurrentUser(){
 	let sessionType = sessionStorage.getItem("session0");
 	let sessionSuccess = sessionStorage.getItem("session1");
@@ -29,7 +38,8 @@ function getCurrentUser(){
 	
 }
 
-function addRows() {
+function addSavedSketchesTable() {
+	
 	var sessionType = sessionStorage.getItem("session0");
 	var sessionSuccess = sessionStorage.getItem("session1");
 	let count = 0
@@ -46,13 +56,150 @@ function addRows() {
  
     
 			row.insertCell(0).innerHTML= sketchName;
-			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="deletsRow(this)">';
+			row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="loadSketch(this)">';
 			row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="deleteRow(this)">';
 			sessionCnt++;
 		}
 	}
  
 }
+
+
+function saveSketch(){
+	
+	var table = document.getElementById("tableData");
+	var rowCount = table.rows.length;
+	var row = table.insertRow(rowCount);
+	//var fileName = "";
+    
+	var state = "";
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			state += tiles[c][r].state;
+		}
+	}
+
+	
+
+	$.ajax({
+		type: "get",
+				 url: "/cgi-bin/sketchHandler.py",
+	 data: {type: "saveSketch", user: "elwin", file: "sk", matrixState: state},
+			context: document.body,
+			success: function (response){
+				console.log("done: " + response);
+				var fileName = response;
+				row.insertCell(0).innerHTML= fileName;
+				row.insertCell(1).innerHTML= '<input type="button" value = "Load" onClick="loadSketch(this)">';
+				row.insertCell(2).innerHTML= '<input type="button" value = "Delete" onClick="deleteRow(this)">';
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(textStatus+" : "+errorThrown);
+			}
+ });
+
+ 	
+
+
+	
+
+	console.log("Matrix state: "+ state);
+}
+
+function loadData(loadedString){
+	/*
+	load string from database into var loadedString here
+	
+	*/
+	
+	var strPos = 0;
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			if(loadedString.charAt(strPos) == 'e'){
+				tiles[c][r].state = 'e';
+				strPos++;
+			}
+			else{
+				tiles[c][r].state = loadedString.substring(strPos,strPos+7);
+				strPos += 7;
+			}
+			
+		}
+	}
+	
+	
+}
+
+
+
+function submitSketch(){
+
+	var state = "";
+	for(c = 0; c < tileColumnCount; c++){
+		for(r = 0; r < tileRowCount; r++){
+			state += tiles[c][r].state;
+		}
+	}
+
+	$.ajax({
+		type: "POST",
+				 url: "/cgi-bin/sketchHandler.py",
+	 data: {type: "submitSketch", user: currentUserName, matrixState: state},
+			context: document.body
+ });	
+
+	console.log("Matrix state: "+ state);
+}
+
+
+function loadSketch(obj){
+
+	var index = obj.parentNode.parentNode.rowIndex;
+	var table = document.getElementById("tableData");
+
+	var row = obj.parentNode.parentNode;  //td than tr
+  var cells = row.getElementsByTagName("td"); //cells
+	console.log(cells[0].textContent);
+	
+	sketch = cells[0].textContent;
+	sketch = sketch.slice(1,sketch.length-1);
+	console.log(sketch);
+	
+
+	$.ajax({
+		type: "get",
+				 url: "/cgi-bin/sketchHandler.py",
+	 data: {user: "elwin", type: "loadSketch", file: sketch},
+			context: document.body,
+			
+			success: function (result){
+				//console.log("done loadedStr: " + result);
+				var loadedString = result;
+				console.log("loadedStr: " + loadedString);
+
+				var strPos = 1;
+				for(c = 0; c < tileColumnCount; c++){
+					for(r = 0; r < tileRowCount; r++){
+						if(loadedString.charAt(strPos) == 'e'){
+							tiles[c][r].state = 'e';
+							strPos++;
+						}else{
+							tiles[c][r].state = loadedString.substring(strPos,strPos+7);
+							strPos += 7;
+						}
+			
+					}
+				}
+				
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(textStatus+" : "+errorThrown);
+			}
+ });
+
+}
+
+
  
 function deleteRow(obj) {
       
@@ -63,6 +210,7 @@ function deleteRow(obj) {
 }
 
 function loadMatrix(){
+
 	for(c = 0; c < tileColumnCount; c++){
 		for(r = 0; r < tileRowCount; r++){
 			tiles[c][r].state = 'e';
@@ -71,23 +219,8 @@ function loadMatrix(){
 	
 }
 
-function saveSketch(){
-	var state = ""
-	for(c = 0; c < tileColumnCount; c++){
-		for(r = 0; r < tileRowCount; r++){
-			state += tiles[c][r].state;
-		}
-	}
-	console.log("Matrix state: "+ state);
-}
 
-var tiles = [];
-for(c = 0; c < tileColumnCount; c++){
-	tiles[c] = [];
-	for(r = 0; r < tileRowCount; r++){
-		tiles[c][r] = {x: c*(tileW+3), y: r*(tileH+3), state: 'e'};
-	}
-}
+
 
 function rect(x,y,w,h,state){
 	if(state == 'e'){
@@ -128,6 +261,7 @@ function sleep(milliseconds) {
 
 
 function sendData(){		
+	
 	for(r = (tileRowCount-1); r >= 0; r--){
 		var rev = 0;
 		for(c = 0; c < tileColumnCount; c++){
@@ -147,6 +281,8 @@ function sendData(){
 			c = rev++;
 		}
 	}
+
+
 			$.ajax({
 			 	type: "POST",
 			      	url: "/cgi-bin/pytest.py",
@@ -170,7 +306,7 @@ function init(){
 	canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
 	getCurrentUser();
-	addRows()
+	addSavedSketchesTable();
 	return setInterval(draw, 10);
 }
 

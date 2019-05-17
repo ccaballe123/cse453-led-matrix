@@ -119,7 +119,7 @@ def isUserLoggedin(userName):
 
 def getAllLoggedinUsers():
 	db = sqlite3.connect("database.db") 
-	cursor = db.cursor();
+	cursor = db.cursor()
 	cursor.execute(''' SELECT userName FROM students where loggedin = 1''')
 	studentRecord = cursor.fetchall()
 	db.close()
@@ -183,14 +183,15 @@ def getAllSavedSketches():
 
 	
 
-def saveSketch(userName, data, fileName):
+def saveSketch(userName, data,fileName):
 	userName = userName.lower();
 	stuId = getLastRecordId() +1
 	stuIdStr = str(stuId)
-	sketchName = userName+"_"+fileName+".txt"
+	sketchCount = str(getSketchCount(userName))
+	sketchName = userName+"_"+sketchCount+".txt"
 	
-	#sketchPath = "/home/elwin/sketches/"+userName+"/"
-	sketchPath = userName+"/"
+	sketchPath = "/home/pi/sketches/"+userName+"/"
+	#sketchPath = userName+"/"
 	sketchCount =0;
 	
 	db = sqlite3.connect("database.db")
@@ -213,16 +214,35 @@ def saveSketch(userName, data, fileName):
 
 	db.commit()
 	db.close()
+	return sketchName
 	
+
+def getAllSavedSkethData(userName):
+	userName = userName.lower()
+	sketchNames = getSavedSketchNames(userName);
 	
+	sketchData = [None] * len(sketchNames)
+	for i in range(0, len(sketchNames)):
+		sketchPath = "/home/pi/sketches/"+userName+"/"+sketchNames[i]
+
+		if not os.path.exists(sketchPath):
+			print "User does not hava a folder in this path"
+			#os.makedirs(sketchPath)
+		else:
+			f = open(sketchPath, "r")
+			sketchData[i] = f.readline()
+			print sketchData[i]
+	
+	f.close()
+	return 
 	
 
 
 def addUser(userName, userType, password):
 	userName = userName.lower();
 	stuId = getLastRecordId() +1
-	#sketchPath = "/home/elwin/sketches/"+userName+"/"
-	sketchPath = userName+"/"
+	sketchPath = "/home/pi/sketches/"+userName+"/"
+	#sketchPath = userName+"/"
 	thisUserNameCount = getUserNameCount(userName)
 	success = -1
 	
@@ -242,6 +262,8 @@ def addUser(userName, userType, password):
 	#finally:
 		#cursor.close()
 		#db.close()
+
+
 	
 	cursor.close()
 	db.close()
@@ -309,8 +331,87 @@ def logUserOut(userName):
 		cursor.execute(''' UPDATE students SET loggedin = 0 WHERE userName = ? ''', (userName,))
 		db.commit()
 		db.close()
-	
-	
 
 
+
+
+def submitSketch(userName, sketchData):
+	userName = userName.lower()
+	success = -1
 	
+	db = sqlite3.connect("database.db")
+	cursor = db.cursor() 
+	try:
+		cursor.execute(''' INSERT INTO submitted_sketches(userName, sketchData)
+						VALUES (?,?)
+						''', (userName,sketchData))
+		db.commit()
+		
+		success = 0
+	except db.IntegrityError:
+		success = -1
+	#finally:
+		#cursor.close()
+		#db.close()
+
+	
+	cursor.close()
+	db.close()
+		
+	return success
+
+
+def readyToSend(sketchData):
+
+	f = open("dbIdx.txt", "r")
+	dbIdx = int(f.readline())
+	f.close()
+		
+	
+	db = sqlite3.connect("database.db")
+
+
+	cursor = db.cursor() 
+	try:
+		cursor.execute(''' UPDATE ready_for_display SET sketchData = ?  WHERE id = ? 
+						''', (sketchData,dbIdx))
+		db.commit()
+		
+		success = 0
+	except db.IntegrityError:
+		success = -1
+	#finally:
+		#cursor.close()
+		#db.close()
+
+
+
+	if dbIdx == 9:
+		dbIdx =0
+	else:
+		dbIdx += 1
+
+	f = open("dbIdx.txt", "w")
+	f.write(str(dbIdx));
+	f.close()
+	
+	cursor.close()
+	db.close()
+		
+	return success
+
+
+def getReadySketchData(sketchId):
+	db = sqlite3.connect("database.db") 
+	cursor = db.cursor()
+	cursor.execute(''' SELECT sketchData FROM ready_for_display where id = ?''', (sketchId,))
+	sketchData = cursor.fetchone()
+	db.close()
+	if sketchData is None:
+		return ""
+	return sketchData[0]
+
+def getSavedSketchData(userName, fileName):
+	sketchPath = "/home/pi/sketches/"+userName+"/"+fileName
+	f = open (sketchPath, "r")
+	return f.readline()

@@ -28,15 +28,23 @@ html = consts.startHtml() + consts.clearSession();
 
 def logUserIn():
 	global html
-	if db.userExists(userName) == 1 and db.getUserNameCount(userName) == 1 and db.getUserPass(userName) == password:
+	if db.userExists(userName) == 1 and db.getUserNameCount(userName) == 1:
 		db.logUserIn(userName)
-		sketches = db.getSavedSketchNames(userName)
+		
 		sessionVar = "login"
 		html +=  consts.addSession("login") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(str(len(sketches)))
-			
+
+		sketchName = db.getSavedSketchNames(userName)	
 		for i in range(0, len(sketches)):
-			sessionVar = sketches[i]
-			html +=  consts.addSession(sketches[i])
+			sessionVar = sketchName[i]
+			html +=  consts.addSession(sketchname[i])
+		
+		sketchData = db.getSavedSketchData(userName)
+		for i in range(0, len(sketchData)):
+			sessionVar = sketchData[i]
+			html += consts.addSession(sessionVar)
+
+		
 		html +=  consts.mainSite(userName) + consts.endHtml()
 		#print html
 			
@@ -57,20 +65,18 @@ def genPassword(numLetters):
 
 
 if formType == 'login':
-	#check for valid user name and pass by database
-	if userName == 'tmp':
-		html += consts.addSession("login") + consts.addSession("true") + consts.addSession(userName) + consts.addSession("0")+ consts.mainSite(userName) + consts.endHtml()
-		#print html
-	#elif db.getUserType(userName) == 'admin':  #check if user is administrator  
-	else:
-		logUserIn()
-	
+	logUserIn()
 	print html
 			
 			
 		
 	
-	
+
+
+'''	
+We don't want the students having to register
+
+'''
 if formType == 'register':
 	#compute password based on username and add them to database
 	randomPass = genPassword(3)
@@ -78,10 +84,9 @@ if formType == 'register':
 		html += consts.addSession("register") + consts.addSession("false") +  consts.addSession(userName) +consts.registerFailed(userName) +consts.endHtml()
 		#print html
 	else:
-		db.addUser(userName, "user", randomPass)
-		html += consts.addSession("register") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(randomPass)  + consts.registerSuccess(userName) + consts.endHtml()
+		db.addUser(userName, "user", "") # we want an empty password
+		html += consts.addSession("register") + consts.addSession("true") + consts.addSession(userName)  + consts.registerSuccess(userName) + consts.endHtml()
 	print html
-		
 		
 		
 			
@@ -99,16 +104,21 @@ if formType == 'register-admin':
 			
 			
 			
-			
+
+''' 
+ This will only be available to the administarator, can we make it so it can send an email instead of displaying the password on the site
+
+'''
+
 if formType == 'forgot-pass':
 	if db.userExists(userName) == 1 and db.getUserType(userName) == "admin" :
 		html += consts.addSession("forgot-pass") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(db.getUserPass(userName)) + consts.forgotPass(userName, password) + consts.endHtml()
 		
-	elif db.userExists(userName) == 1 and db.getUserType(userName) == "user":
+	'''elif db.userExists(userName) == 1 and db.getUserType(userName) == "user":
 		html += consts.addSession("forgot-pass") + consts.addSession("true") + consts.addSession(userName) + consts.addSession(db.getUserPass(userName)) + consts.forgotPass(userName, password) + consts.endHtml()
 		
 	else:
-		html += consts.addSession("forgot-pass") + consts.addSession("false") + consts.addSession(userName) + consts.forgotPass(userName, password) + consts.endHtml()
+		html += consts.addSession("forgot-pass") + consts.addSession("false") + consts.addSession(userName) + consts.forgotPass(userName, password) + consts.endHtml()'''
 	
 	print html
 

@@ -26,7 +26,7 @@ function displayPass(userName, password) {
 
 function registerSuccess(userName, password) {
 	document.getElementById("register-success").innerHTML = 'Congratulations <span style="font-weight: bold"> '+userName+'</span> has been registerd.';
-	document.getElementById("new-pass").innerHTML = 'Your password is: <span style="font-weight: bold"> '+password+'</span>';
+	//document.getElementById("new-pass").innerHTML = 'Your password is: <span style="font-weight: bold"> '+password+'</span>';
 }
 
 function registerFailed(userName) {
